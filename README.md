@@ -82,7 +82,14 @@ Install these dependencies for your distribution before running `setup.sh`:
 
 ### Optional: AMD GPU (Radeon)
 
-Vulkan works on AMD out of the box via Mesa/AMDGPU drivers. Official CUDA is NVIDIA-only. If you have an AMD card and wish to use the `BasicVSR++` temporal pass, ROCm support is implemented but untested (install PyTorch with ROCm via pip); alternatively, configure the application to run the upscalers (Real-CUGAN/ESRGAN) on Vulkan with FFmpeg temporal processing.
+Vulkan works on AMD out of the box via Mesa/AMDGPU drivers. Official CUDA is NVIDIA-only. If you have an AMD card and wish to use the `BasicVSR++` temporal pass with GPU acceleration, install PyTorch with ROCm support:
+
+```bash
+pip install torch torchvision --index-url https://download.pytorch.org/whl/rocm6.2
+```
+
+> [!NOTE]
+> PyTorch with ROCm support is implemented but remains untested. Alternatively, configure the application to run the spatial upscalers (Real-CUGAN / Real-ESRGAN) on Vulkan with FFmpeg temporal processing.
 
 ---
 
