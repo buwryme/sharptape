@@ -77,7 +77,7 @@ Install these dependencies for your distribution before running `setup.sh`:
 >
 > To use the AI temporal enhancement pass (`BasicVSR++`) with GPU acceleration, let `setup.sh` install them automatically via `pip`, or run:
 > ```bash
-> pip install torch torchvision --index-url https://download.pytorch.org/whl/cu121
+> pip install torch torchvision --index-url https://download.pytorch.org/whl/cu126
 > ```
 
 ### Optional: AMD GPU (Radeon)
