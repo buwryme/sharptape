@@ -18,7 +18,7 @@ Thank you for your interest in contributing! We welcome bug reports, feature req
 
 ✅ "Fixed color space handling in ESRGAN by checking model scale support. Related: https://github.com/xinntao/Real-ESRGAN-ncnn-vulkan/issues/80"
 
-✅ "Optimized frame filtering from per-frame spawning to batch mode. Reduces overhead from O(n) process spawns to O(1). Benchmark: 3000 frames 5→50s on GTX 1650."
+✅ "Optimized frame filtering from per-frame spawning to batch mode. Reduces overhead from O(n) process spawns to O(1). Benchmark: 3000 frames 5→50s on [HARDWARE HERE]."
 
 ### Examples of Unacceptable PRs
 
@@ -61,7 +61,7 @@ All PRs will be **thoroughly reviewed and tested** before merging. Expect:
 
 Include:
 
-- **Steps to reproduce** — exact commands and settings
+- **Steps to reproduce** — exact settings/environment combinations
 - **Expected behavior** — what should happen
 - **Actual behavior** — what actually happened
 - **Debug logs** — run with `DEBUG=1` and paste relevant output
