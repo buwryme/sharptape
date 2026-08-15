@@ -172,6 +172,16 @@ Check out the [issues page](https://github.com/buwryme/sharptape/issues) for kno
 
 ---
 
+## Contributing
+
+Contributions are welcome and greatly appreciated. Please refer to our [Contributing Guidelines](CONTRIBUTING.md) for details on our code standards, workflow, and submission process.
+
+All contributors and community are expected to adhere to our [Code of Conduct](CODE_OF_CONDUCT.md).
+
+If our Code of Conduct is violated, please contact the project maintainers privately here on GitHub.
+
+---
+
 ## License
 
 Apache License 2.0 — See [LICENSE](LICENSE)
