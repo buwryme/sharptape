@@ -1,0 +1,10 @@
+[Desktop Entry]
+Type=Application
+Name=Sharptape
+Comment=Video Quality Enhancement Tool
+Exec=sh -c "$HOME/.local/bin/sharptape"
+Icon=net.buwryy.Sharptape
+Terminal=false
+Categories=AudioVideo;Video;GTK;
+StartupWMClass=net.buwryy.Sharptape
+Keywords=video;upscale;enhance;sharpen;

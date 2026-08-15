@@ -1,0 +1,8 @@
+# Core (required)
+PyGObject>=3.42
+Pillow>=9.0
+numpy>=1.21
+
+# AI processing (optional -- falls back to FFmpeg filters if missing)
+torch>=2.0
+torchvision>=0.15
