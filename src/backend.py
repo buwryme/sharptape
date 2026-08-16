@@ -77,10 +77,18 @@ class Worker(GObject.Object, threading.Thread):
         if not getattr(self._cfg, 'auto_config', True):
             # MANUAL MODE: use user's config values
             tile_auto = getattr(self._cfg, 'ncnn_tile_auto', True)
+            vsr_blocks = getattr(self._cfg, 'vsr_blocks', 4)
+            ncnn_tile = getattr(self._cfg, 'ncnn_tile', 192)
+            
+            # Auto-adjust tile only if user sets very high vsr_blocks (>8)
+            if vsr_blocks > 8 and ncnn_tile >= 192:
+                ncnn_tile = max(192, ncnn_tile // 2)  # Halve but keep >= 192 minimum
+                self._debug_log(f"Reducing NCNN tile to {ncnn_tile} (high vsr_blocks={vsr_blocks})")
+            
             settings = {
                 'vsr_batch': getattr(self._cfg, 'vsr_batch', 2),
-                'vsr_blocks': getattr(self._cfg, 'vsr_blocks', 10),
-                'ncnn_tile': getattr(self._cfg, 'ncnn_tile', 192),
+                'vsr_blocks': vsr_blocks,
+                'ncnn_tile': ncnn_tile,
                 'ncnn_tile_auto': tile_auto,
                 'ncnn_jobs': getattr(self._cfg, 'ncnn_jobs', '1:4:4'),
                 'cugan_tier': getattr(self._cfg, 'cugan_tier', 'se'),
@@ -801,12 +809,12 @@ class Worker(GObject.Object, threading.Thread):
     def _build_model_dynamic(self, hw_profile: HardwareProfile):
         """Build BasicVSR++ network with DYNAMIC COMPLEXITY based on hardware.
 
-        Architecture scales with hardware tier:
-        - NONE/CPU:  6 backbone blocks  (~25MB, minimal VRAM)
-        - LOW:       8 backbone blocks  (~30MB, conservative)
-        - MEDIUM:    10 backbone blocks (~35MB, balanced)
-        - HIGH:      14 backbone blocks (~45MB, good quality)
-        - ULTRA:     18+ backbone blocks (~55MB, maximum quality)
+        Architecture scales conservatively with hardware tier:
+        - NONE/CPU:  3 backbone blocks  (~15MB, minimal VRAM)
+        - LOW:       4 backbone blocks  (~20MB, conservative)
+        - MEDIUM:    4 backbone blocks  (~20MB, balanced)
+        - HIGH:      5 backbone blocks  (~25MB, good quality)
+        - ULTRA:     6 backbone blocks  (~30MB, maximum quality)
 
         Weights are loaded with strict=False to allow partial compatibility."""
         try:
