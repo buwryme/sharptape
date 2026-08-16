@@ -126,7 +126,7 @@ class Worker(GObject.Object, threading.Thread):
                 self._debug_log("config mode: AUTO (hardware-detected optimal settings)")
             else:
                 _tile_disp = 'auto' if self._cfg.ncnn_tile_auto else str(self._cfg.ncnn_tile)
-            self._debug_log(f"config mode: MANUAL (batch={self._cfg.vsr_batch}, blocks={self._cfg.vsr_blocks}, tile={_tile_disp}, tier={self._cfg.cugan_tier})")
+                self._debug_log(f"config mode: MANUAL (batch={self._cfg.vsr_batch}, blocks={self._cfg.vsr_blocks}, tile={_tile_disp}, tier={self._cfg.cugan_tier})")
 
             self._prog(0.0, "init")
 
