@@ -80,11 +80,6 @@ class Worker(GObject.Object, threading.Thread):
             vsr_blocks = getattr(self._cfg, 'vsr_blocks', 4)
             ncnn_tile = getattr(self._cfg, 'ncnn_tile', 192)
             
-            # Auto-adjust tile only if user sets very high vsr_blocks (>8)
-            if vsr_blocks > 8 and ncnn_tile >= 192:
-                ncnn_tile = max(192, ncnn_tile // 2)  # Halve but keep >= 192 minimum
-                self._debug_log(f"Reducing NCNN tile to {ncnn_tile} (high vsr_blocks={vsr_blocks})")
-            
             settings = {
                 'vsr_batch': getattr(self._cfg, 'vsr_batch', 2),
                 'vsr_blocks': vsr_blocks,
@@ -101,19 +96,17 @@ class Worker(GObject.Object, threading.Thread):
         else:
             # AUTO MODE: use hardware-detected optimal values
             ncnn_params = hw_profile.adaptive_ncnn_params(2)  # default scale for params
-            tile_auto = getattr(self._cfg, 'ncnn_tile_auto', True)
             settings = {
                 'vsr_batch': hw_profile.vsr_batch_size,
                 'vsr_blocks': hw_profile.vsr_backbone_blocks,
                 'ncnn_tile': hw_profile.ncnn_tile_size,
-                'ncnn_tile_auto': tile_auto,
+                'ncnn_tile_auto': False,  # Use fixed tile size, not auto ("-t 0")
                 'ncnn_jobs': hw_profile.ncnn_jobs,
                 'cugan_tier': 'se',  # ignored in auto mode; _ncnn_upscale() uses its own priority order
                 'use_fp16': hw_profile.use_fp16,
                 'use_amp': hw_profile.amp_enabled,
             }
-            tile_disp = 'auto' if tile_auto else str(settings['ncnn_tile'])
-            self._debug_log(f"AUTO AI settings: batch={settings['vsr_batch']}, blocks={settings['vsr_blocks']}, tile={tile_disp}")
+            self._debug_log(f"AUTO AI settings: batch={settings['vsr_batch']}, blocks={settings['vsr_blocks']}, tile={settings['ncnn_tile']}")
             return settings
 
     def run(self) -> None:
@@ -1167,8 +1160,9 @@ class Worker(GObject.Object, threading.Thread):
                 "Run the setup script to download models:\n  ./setup.sh")
 
         ncnn_jobs = ai_settings.get('ncnn_jobs', '1:4:4')
-        use_tile_auto = getattr(self._cfg, 'ncnn_tile_auto', True)
-        tile_arg = "0" if use_tile_auto else str(self._cfg.ncnn_tile)
+        use_tile_auto = ai_settings.get('ncnn_tile_auto', True)
+        tile_value = ai_settings.get('ncnn_tile', 192)
+        tile_arg = "0" if use_tile_auto else str(tile_value)
         gpu_id = self._ncnn_gpu_id()
         self._debug_log(f"realcugan: {len(frames)} frames, {sf}x, model={model_dir}, noise={noise_level}, gpu={gpu_id}")
 
@@ -1246,8 +1240,9 @@ class Worker(GObject.Object, threading.Thread):
             self._log(f"Real-ESRGAN: using {model_flavor} model: {model_name}")
 
         ncnn_jobs = ai_settings.get('ncnn_jobs', '1:4:4')
-        use_tile_auto = getattr(self._cfg, 'ncnn_tile_auto', True)
-        tile_arg = "0" if use_tile_auto else str(self._cfg.ncnn_tile)
+        use_tile_auto = ai_settings.get('ncnn_tile_auto', True)
+        tile_value = ai_settings.get('ncnn_tile', 192)
+        tile_arg = "0" if use_tile_auto else str(tile_value)
         gpu_id = self._ncnn_gpu_id()
         self._debug_log(f"realesrgan: {len(frames)} frames, {sf}x, model={model_name}, gpu={gpu_id}")
 
