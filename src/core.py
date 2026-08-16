@@ -487,26 +487,30 @@ class HardwareProfile:
         self._calculate_precision_settings()
 
     def _calculate_vsr_settings(self, vram_gb: float) -> None:
-        """Calculate optimal VSR batch size and model complexity."""
+        """Calculate optimal VSR batch size and model complexity.
+        
+        Backbone blocks: conservative baseline ~4 for midrange.
+        Minimal tier variation; users can tune in Advanced settings.
+        """
         if self.tier == HardwareTier.NONE:
             self.vsr_batch_size = 1
-            self.vsr_backbone_blocks = 6  # Minimal backbone on CPU
+            self.vsr_backbone_blocks = 3  # Minimal backbone on CPU
         elif self.tier == HardwareTier.LOW:
             # 512MB-2GB: Very conservative, single frame
             self.vsr_batch_size = 1
-            self.vsr_backbone_blocks = 8
+            self.vsr_backbone_blocks = 4
         elif self.tier == HardwareTier.MEDIUM:
-            # 2-6GB: Small batches possible
+            # 2-6GB: Small batches possible, conservative backbone
             self.vsr_batch_size = 2
-            self.vsr_backbone_blocks = 10
+            self.vsr_backbone_blocks = 4
         elif self.tier == HardwareTier.HIGH:
-            # 6-12GB: Good batching
+            # 6-12GB: Good batching, slightly higher quality
             self.vsr_batch_size = 4
-            self.vsr_backbone_blocks = 14
+            self.vsr_backbone_blocks = 5
         else:  # ULTRA
-            # >12GB: Aggressive batching
+            # >12GB: Aggressive batching, best quality
             self.vsr_batch_size = 8
-            self.vsr_backbone_blocks = 18
+            self.vsr_backbone_blocks = 6
 
     def _calculate_ncnn_settings(self, vram_gb: float) -> None:
         """Calculate optimal NCNN tile size and job count."""
@@ -800,7 +804,7 @@ class Config:
 
     # Advanced AI settings (persisted to JSON)
     vsr_batch: int = 2           # BasicVSR++ batch size
-    vsr_blocks: int = 10         # BasicVSR++ backbone blocks
+    vsr_blocks: int = 4          # BasicVSR++ backbone blocks (conservative baseline)
     ncnn_tile: int = 192         # NCNN tile size
     ncnn_tile_auto: bool = True  # True=auto (-t 0), False=use ncnn_tile value
     ncnn_jobs: str = "1:4:4"     # NCNN thread count format
