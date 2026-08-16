@@ -150,7 +150,7 @@ class HardwareProfile:
     tier: HardwareTier = HardwareTier.NONE
     vsr_batch_size: int = 1
     vsr_backbone_blocks: int = 10
-    ncnn_tile_size: int = 128
+    ncnn_tile_size: int = 224
     ncnn_jobs: str = "1:2:2"
     use_fp16: bool = False
     use_torch_compile: bool = False
@@ -515,12 +515,12 @@ class HardwareProfile:
     def _calculate_ncnn_settings(self, vram_gb: float) -> None:
         """Calculate optimal NCNN tile size and job count."""
         if self.tier == HardwareTier.NONE:
-            # CPU-only: small tiles, single job
-            self.ncnn_tile_size = 64
+            # CPU-only: minimum 224
+            self.ncnn_tile_size = 224
             self.ncnn_jobs = "1:1:1"
         elif self.tier == HardwareTier.LOW:
-            # Low VRAM: conservative tiling
-            self.ncnn_tile_size = 128
+            # Low VRAM: minimum 224
+            self.ncnn_tile_size = 224
             self.ncnn_jobs = "1:2:2"
         elif self.tier == HardwareTier.MEDIUM:
             # Medium VRAM: balanced
@@ -579,7 +579,7 @@ class HardwareProfile:
 
         # For higher scale factors, reduce tile size to manage memory
         if scale_factor >= 4 and self.tier.value <= HardwareTier.MEDIUM.value:
-            params["tile_size"] = max(64, self.ncnn_tile_size // 2)
+            params["tile_size"] = max(128, self.ncnn_tile_size // 2)
 
         return params
 
