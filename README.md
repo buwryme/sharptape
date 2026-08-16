@@ -6,7 +6,7 @@
   <b>Sharptape</b>
 </p>
 
-[![Version](https://img.shields.io/badge/version-v1.0.0-blue?style=flat-square)](VERSION)
+[![Version](https://img.shields.io/badge/version-v1.0.1-blue?style=flat-square)](VERSION)
 [![License: Apache 2.0](https://img.shields.io/badge/license-Apache%202.0-green?style=flat-square)](LICENSE)
 [![Platform: Linux](https://img.shields.io/badge/platform-Linux-orange?style=flat-square)](README.md)
 
