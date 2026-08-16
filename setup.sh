@@ -67,7 +67,7 @@ if [[ -d "$models_dir/real-cugan/models-se" || -d "$models_dir/real-cugan/models
   warn "Real-CUGAN models already present, skipping."
 else
   info "Fetching Real-CUGAN release..."
-  cugan_url=$(curl -s https://api.github.com/repos/nihui/realcugan-ncnn-vulkan/releases/latest | grep "browser_download_url" | grep "ubuntu" | cut -d '"' -f 4 | head -n 1)
+  cugan_url=$(curl -s https://api.github.com/repos/nihui/realcugan-ncnn-vulkan/releases/latest | grep "browser_download_url" | grep "ubuntu" | cut -d '"' -f 4 | head -n 1 || true)
 
   if [[ -n "$cugan_url" ]]; then
     info "Downloading Real-CUGAN models..."
@@ -85,18 +85,21 @@ fi
 if compgen -G "$models_dir/realesrgan/*.bin" > /dev/null; then
   warn "Real-ESRGAN models already present, skipping."
 else
-  info "Fetching Real-ESRGAN release..."
-  esrgan_url=$(curl -s https://api.github.com/repos/xinntao/Real-ESRGAN-ncnn-vulkan/releases/latest | grep "browser_download_url" | grep "ubuntu" | cut -d '"' -f 4 | head -n 1)
-
-  if [[ -n "$esrgan_url" ]]; then
-    info "Downloading Real-ESRGAN models..."
-    curl -sSLA "Mozilla/5.0" -L -o "$tmp_dir/realesrgan.zip" "$esrgan_url"
+  info "Downloading Real-ESRGAN models..."
+  esrgan_url="https://github.com/xinntao/Real-ESRGAN/releases/download/v0.2.5.0/realesrgan-ncnn-vulkan-20220424-ubuntu.zip"
+  
+  if curl -sSLA "Mozilla/5.0" -L -o "$tmp_dir/realesrgan.zip" "$esrgan_url" 2>/dev/null; then
     unzip -q "$tmp_dir/realesrgan.zip" -d "$tmp_dir/esrgan_extracted"
-
     find "$tmp_dir/esrgan_extracted" -type f \( -name "*.bin" -o -name "*.param" \) -exec cp {} "$models_dir/realesrgan/" \;
-    success "Real-ESRGAN models downloaded"
+    
+    # Verify files were actually copied
+    if compgen -G "$models_dir/realesrgan/*.bin" > /dev/null; then
+      success "Real-ESRGAN models downloaded"
+    else
+      error "Real-ESRGAN models failed to extract/copy. Check disk space."
+    fi
   else
-    warn "Could not fetch Real-ESRGAN URL, skipping."
+    error "Failed to download Real-ESRGAN models from $esrgan_url"
   fi
 fi
 
