@@ -75,7 +75,7 @@ Install these dependencies for your distribution before running `setup.sh`:
 > [!IMPORTANT]
 > **GPU / CUDA Acceleration Warning:** 
 > Do **not** install PyTorch (`python3-torch` or `python-pytorch`) from distribution repositories (especially on Fedora or official OSS repos), as they do not package NVIDIA CUDA support.
->
+>Added troubleshooting tips for black output issues and clarified Auto Mode's impact on ESRGAN/CUGAN.
 > To use the AI temporal enhancement pass (`BasicVSR++`) with GPU acceleration, let `setup.sh` install them automatically via `pip`, or run:
 > ```bash
 > pip install torch torchvision --index-url https://download.pytorch.org/whl/cu126
@@ -179,7 +179,10 @@ Sharptape includes multi-language support with automatic detection from your sys
 
 Check out the [issues page](https://github.com/buwryme/sharptape/issues) for known issues and potential solutions, or open a new issue if you don't find what you're looking for.
 
-- Auto Mode might break ESRGAN/CUGAN and produce black output
+> [!IMPORTANT]
+> **Auto Mode breaks Real-ESRGAN/CUGAN and produces black output!**
+> Simply toggling the switch off might fix.
+> This is an ongoing issue that yet needs a fix.
 
 ---
 
