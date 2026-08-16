@@ -156,6 +156,7 @@ Sharptape includes multi-language support with automatic detection from your sys
 ## Troubleshooting
 
 ### "Black output" or corrupted frames
+- Disable Auto mode
 - Lower scale % or tile size
 - Close other GPU-using apps (Discord, Chrome, etc.)
 - Update drivers
@@ -177,6 +178,8 @@ Sharptape includes multi-language support with automatic detection from your sys
 ### Other issues?
 
 Check out the [issues page](https://github.com/buwryme/sharptape/issues) for known issues and potential solutions, or open a new issue if you don't find what you're looking for.
+
+- Auto Mode might break ESRGAN/CUGAN and produce black output
 
 ---
 
