@@ -39,6 +39,7 @@ git clone https://github.com/buwryme/sharptape.git
 cd sharptape/sharptape
 
 # Install system deps (see below), then:
+chmod +x setup.sh
 ./setup.sh
 
 # Run (after setup.sh installs the launcher)
