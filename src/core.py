@@ -524,7 +524,7 @@ class HardwareProfile:
             self.ncnn_jobs = "1:2:2"
         elif self.tier == HardwareTier.MEDIUM:
             # Medium VRAM: balanced
-            self.ncnn_tile_size = 192
+            self.ncnn_tile_size = 224
             self.ncnn_jobs = "1:4:4"
         elif self.tier == HardwareTier.HIGH:
             # High VRAM: larger tiles
@@ -805,7 +805,7 @@ class Config:
     # Advanced AI settings (persisted to JSON)
     vsr_batch: int = 2           # BasicVSR++ batch size
     vsr_blocks: int = 4          # BasicVSR++ backbone blocks (conservative baseline)
-    ncnn_tile: int = 192         # NCNN tile size
+    ncnn_tile: int = 224         # NCNN tile size
     ncnn_tile_auto: bool = True  # True=auto (-t 0), False=use ncnn_tile value
     ncnn_jobs: str = "1:4:4"     # NCNN thread count format
     cugan_tier: str = "se"       # Real-CUGAN model tier (se/pro/nose)
