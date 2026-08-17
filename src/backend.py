@@ -79,7 +79,7 @@ class Worker(GObject.Object, threading.Thread):
             tile_auto = getattr(self._cfg, 'ncnn_tile_auto', True)
             vsr_blocks = getattr(self._cfg, 'vsr_blocks', 4)
             ncnn_tile = getattr(self._cfg, 'ncnn_tile', 224)
-            
+
             settings = {
                 'vsr_batch': getattr(self._cfg, 'vsr_batch', 2),
                 'vsr_blocks': vsr_blocks,
@@ -284,7 +284,7 @@ class Worker(GObject.Object, threading.Thread):
 
         Uses image2 muxer with %08d pattern for sequential numbering.
         Compatible with FFmpeg 7.x+.
-        
+
         FIX (v1.0.0): Added explicit pixel format and color space handling
         to fix green tint issues. PNG extraction now uses RGB24 output which
         preserves color fidelity through the pipeline.
@@ -463,7 +463,7 @@ class Worker(GObject.Object, threading.Thread):
                         vendor = selected.get("vendor", "")
                         if vendor in ("nvidia", "amd"):
                             # Translate our GPU list index to CUDA/ROCm device ordinal.
-                            # Our list includes non-CUDA/non-ROCm GPUs (e.g. Intel iGPU), 
+                            # Our list includes non-CUDA/non-ROCm GPUs (e.g. Intel iGPU),
                             # but PyTorch only sees NVIDIA/AMD devices under the "cuda" namespace.
                             # Count NVIDIA/AMD GPUs before this one to get the correct ordinal.
                             cuda_ordinal = sum(
@@ -1162,9 +1162,9 @@ class Worker(GObject.Object, threading.Thread):
         ncnn_jobs = ai_settings.get('ncnn_jobs', '1:4:4')
         use_tile_auto = ai_settings.get('ncnn_tile_auto', True)
         tile_value = ai_settings.get("ncnn_tile", 224)
-        tile_arg = "0" if use_tile_auto else str(tile_value)
+        tile_arg = str(tile_value)
         gpu_id = self._ncnn_gpu_id()
-        self._debug_log(f"realcugan: {len(frames)} frames, {sf}x, model={model_dir}, noise={noise_level}, gpu={gpu_id}")
+        self._debug_log(f"realcugan: {len(frames)} frames, {sf}x, model={model_dir}, noise={noise_level}, gpu={gpu_id}, tile={tile_arg}")
 
         def cmd_builder(frame_in, frame_out):
             return [str(binary), "-i", str(frame_in), "-o", str(frame_out),
@@ -1242,9 +1242,9 @@ class Worker(GObject.Object, threading.Thread):
         ncnn_jobs = ai_settings.get('ncnn_jobs', '1:4:4')
         use_tile_auto = ai_settings.get('ncnn_tile_auto', True)
         tile_value = ai_settings.get("ncnn_tile", 224)
-        tile_arg = "0" if use_tile_auto else str(tile_value)
+        tile_arg = str(tile_value)
         gpu_id = self._ncnn_gpu_id()
-        self._debug_log(f"realesrgan: {len(frames)} frames, {sf}x, model={model_name}, gpu={gpu_id}")
+        self._debug_log(f"realesrgan: {len(frames)} frames, {sf}x, model={model_name}, gpu={gpu_id}, tile={tile_arg}")
 
         def cmd_builder(frame_in, frame_out):
             return [str(binary), "-i", str(frame_in), "-o", str(frame_out),
