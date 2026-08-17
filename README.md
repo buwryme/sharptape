@@ -6,7 +6,7 @@
   <b>Sharptape</b>
 </p>
 
-[![Version](https://img.shields.io/badge/version-v1.0.1-blue?style=flat-square)](VERSION)
+[![Version](https://img.shields.io/badge/version-v1.0.0-blue?style=flat-square)](VERSION)
 [![License: Apache 2.0](https://img.shields.io/badge/license-Apache%202.0-green?style=flat-square)](LICENSE)
 [![Platform: Linux](https://img.shields.io/badge/platform-Linux-orange?style=flat-square)](README.md)
 
@@ -178,11 +178,6 @@ Sharptape includes multi-language support with automatic detection from your sys
 ### Other issues?
 
 Check out the [issues page](https://github.com/buwryme/sharptape/issues) for known issues and potential solutions, or open a new issue if you don't find what you're looking for.
-
-> [!IMPORTANT]
-> **Auto Mode breaks Real-ESRGAN/CUGAN and produces black output!**
-> Simply toggling the switch off might fix.
-> This is an ongoing issue that yet needs a fix.
 
 ---
 
