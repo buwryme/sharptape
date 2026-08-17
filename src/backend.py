@@ -78,7 +78,7 @@ class Worker(GObject.Object, threading.Thread):
             # MANUAL MODE: use user's config values
             tile_auto = getattr(self._cfg, 'ncnn_tile_auto', True)
             vsr_blocks = getattr(self._cfg, 'vsr_blocks', 4)
-            ncnn_tile = getattr(self._cfg, 'ncnn_tile', 224)
+            ncnn_tile = getattr(self._cfg, 'ncnn_tile', 32)
 
             settings = {
                 'vsr_batch': getattr(self._cfg, 'vsr_batch', 2),
@@ -1161,7 +1161,7 @@ class Worker(GObject.Object, threading.Thread):
 
         ncnn_jobs = ai_settings.get('ncnn_jobs', '1:4:4')
         use_tile_auto = ai_settings.get('ncnn_tile_auto', True)
-        tile_value = ai_settings.get("ncnn_tile", 224)
+        tile_value = ai_settings.get("ncnn_tile", 32)
         tile_arg = str(tile_value)
         gpu_id = self._ncnn_gpu_id()
         self._debug_log(f"realcugan: {len(frames)} frames, {sf}x, model={model_dir}, noise={noise_level}, gpu={gpu_id}, tile={tile_arg}")
@@ -1241,7 +1241,7 @@ class Worker(GObject.Object, threading.Thread):
 
         ncnn_jobs = ai_settings.get('ncnn_jobs', '1:4:4')
         use_tile_auto = ai_settings.get('ncnn_tile_auto', True)
-        tile_value = ai_settings.get("ncnn_tile", 224)
+        tile_value = ai_settings.get("ncnn_tile", 32)
         tile_arg = str(tile_value)
         gpu_id = self._ncnn_gpu_id()
         self._debug_log(f"realesrgan: {len(frames)} frames, {sf}x, model={model_name}, gpu={gpu_id}, tile={tile_arg}")

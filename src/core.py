@@ -150,7 +150,7 @@ class HardwareProfile:
     tier: HardwareTier = HardwareTier.NONE
     vsr_batch_size: int = 1
     vsr_backbone_blocks: int = 10
-    ncnn_tile_size: int = 224
+    ncnn_tile_size: int = 32
     ncnn_jobs: str = "1:2:2"
     use_fp16: bool = False
     use_torch_compile: bool = False
@@ -488,7 +488,7 @@ class HardwareProfile:
 
     def _calculate_vsr_settings(self, vram_gb: float) -> None:
         """Calculate optimal VSR batch size and model complexity.
-        
+
         Backbone blocks: conservative baseline ~4 for midrange.
         Minimal tier variation; users can tune in Advanced settings.
         """
@@ -515,16 +515,16 @@ class HardwareProfile:
     def _calculate_ncnn_settings(self, vram_gb: float) -> None:
         """Calculate optimal NCNN tile size and job count."""
         if self.tier == HardwareTier.NONE:
-            # CPU-only: minimum 224
-            self.ncnn_tile_size = 224
+            # CPU-only
+            self.ncnn_tile_size = 32
             self.ncnn_jobs = "1:1:1"
         elif self.tier == HardwareTier.LOW:
-            # Low VRAM: minimum 224
-            self.ncnn_tile_size = 224
+            # Low VRAM
+            self.ncnn_tile_size = 64
             self.ncnn_jobs = "1:2:2"
         elif self.tier == HardwareTier.MEDIUM:
             # Medium VRAM: balanced
-            self.ncnn_tile_size = 224
+            self.ncnn_tile_size = 128
             self.ncnn_jobs = "1:4:4"
         elif self.tier == HardwareTier.HIGH:
             # High VRAM: larger tiles
@@ -532,7 +532,7 @@ class HardwareProfile:
             self.ncnn_jobs = "2:4:4"
         else:  # ULTRA
             # Lots of VRAM: maximum throughput
-            self.ncnn_tile_size = 384
+            self.ncnn_tile_size = 512
             self.ncnn_jobs = "2:8:8"
 
     def _calculate_precision_settings(self) -> None:
@@ -644,7 +644,7 @@ def find_ncnn_bin(name: str) -> Optional[Path]:
     bin_path = NCNN_BIN_DIR / name
     if bin_path.is_file() and os.access(bin_path, os.X_OK):
         return bin_path
-    
+
     # Fallback to system PATH if not found in ~/.local/bin
     p = shutil.which(name)
     return Path(p) if p else None
