@@ -516,19 +516,19 @@ class HardwareProfile:
         """Calculate optimal NCNN tile size and job count."""
         if self.tier == HardwareTier.NONE:
             # CPU-only
-            self.ncnn_tile_size = 32
+            self.ncnn_tile_size = 64
             self.ncnn_jobs = "1:1:1"
         elif self.tier == HardwareTier.LOW:
             # Low VRAM
-            self.ncnn_tile_size = 64
+            self.ncnn_tile_size = 128
             self.ncnn_jobs = "1:2:2"
         elif self.tier == HardwareTier.MEDIUM:
             # Medium VRAM: balanced
-            self.ncnn_tile_size = 128
+            self.ncnn_tile_size = 256
             self.ncnn_jobs = "1:4:4"
         elif self.tier == HardwareTier.HIGH:
             # High VRAM: larger tiles
-            self.ncnn_tile_size = 256
+            self.ncnn_tile_size = 384
             self.ncnn_jobs = "2:4:4"
         else:  # ULTRA
             # Lots of VRAM: maximum throughput
