@@ -15,7 +15,7 @@ ai video upscaler & temporal enhancer for linux.
 ---
 
 ## requirements
-- python 3.10+
+- python
 - gtk4 & libadwaita
 - ffmpeg & vulkan drivers
 - nvidia cuda or amd rocm (optional, for temporal pass)
