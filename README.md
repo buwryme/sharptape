@@ -23,7 +23,7 @@ ai video upscaler & temporal enhancer for linux.
 ## usage
 
 ```bash
-git clone https://github.com/buwryme/sharptape.git
+git clone https://git.buwryy.net/buwryy/sharptape.git
 cd sharptape/sharptape
 chmod +x setup.sh; ./setup.sh
 ```
@@ -53,6 +53,6 @@ for inquiries contact **@buwryy** on discord
 
 <div align="center">
 
-**made with ♥ by [buwryme](https://github.com/buwryme)**
+**made with ♥ by [buwryme](https://git.buwryy.net/buwryy)**
 
 </div>
